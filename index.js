@@ -1,10 +1,22 @@
-const jsonServer = require("json-server"); // importing json-server library
-const server = jsonServer.create();
-const router = jsonServer.router("db.json");
-const middlewares = jsonServer.defaults();
-const port = 3001; // you can use any port number here; i chose to use 3001
+const express=require("express")
+const connection = require("./src/config/db")
+const { AuthRouter } = require("./src/Routes/Auth.route")
+const cors =require("cors")
+require("dotenv").config()
+const app=express()
+const Port=process.env.PORT
+app.use(express.json())
+app.get("/",(req,res)=>{
+    res.send("yes")
+})
 
-server.use(middlewares);
-server.use(router);
+app.use(cors())
+app.use("/auth",AuthRouter)
 
-server.listen(port);
+app.listen(Port,async ()=>{
+    await connection
+    console.log(`server started At http://localhost:${Port}`)
+    console.log(" Connected To DataBase")
+
+ 
+})
